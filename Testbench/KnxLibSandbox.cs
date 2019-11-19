@@ -40,22 +40,29 @@ namespace Testbench
             Console.WriteLine();
             #endregion
 
-            const string ip = "192.168.1.1";
-            const int port = 555;
+            const string IP = "192.168.1.1"; //IP of KNX router
+            const int PORT = 555; //Port of KNX router
+            const string TEST_ADDR = "5/0/2";
 
-            Console.WriteLine($"Connect to {ip}:{port}");
-            var connection = new KnxConnectionRouting(ip, port);
+            Console.WriteLine($"Connect to {IP}:{PORT}");
+            var connection = new KnxConnectionRouting(IP, PORT);
             connection.Connect();
-            connection.KnxEventDelegate += Event;
-            connection.Action("5/0/2", false);
+            connection.KnxEventDelegate += KnxEvent;
+            connection.Action(TEST_ADDR, false);
+            Console.WriteLine("Reset " + TEST_ADDR);
             Thread.Sleep(5000);
-            connection.Action("5/0/2", true);
+            connection.Action(TEST_ADDR, true);
+            Console.WriteLine("Set " + TEST_ADDR);
             //Thread.Sleep(5000);
+            Console.WriteLine("Wait for events on bus. Press any key to abort and quit the programm.");
             Console.ReadKey();
         }
-        static void Event(string address, string state)
+
+        static void KnxEvent(string address, string state)
         {
+            Console.ForegroundColor = ConsoleColor.Magenta;
             Console.WriteLine("New Event: device " + address + " has status " + state);
+            Console.ResetColor();
         }
     }
 }
