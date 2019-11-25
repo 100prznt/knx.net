@@ -40,12 +40,15 @@ namespace Testbench
             Console.WriteLine();
             #endregion
 
-            const string IP = "192.168.1.1"; //IP of KNX router
-            const int PORT = 555; //Port of KNX router
-            const string TEST_ADDR = "5/0/2";
+            const string IP = "192.168.1.224"; //IP of KNX router
+            const int PORT = 3671; //Port of KNX router
+            const string TEST_ADDR = "0/2/19";
 
             Console.WriteLine($"Connect to {IP}:{PORT}");
-            var connection = new KnxConnectionRouting(IP, PORT);
+            //var connection = new KnxConnectionRouting(IP, PORT);
+
+            var connection = new KnxConnectionTunneling(IP, PORT, "192.168.1.180", 55421);
+
             connection.Connect();
             connection.KnxEventDelegate += KnxEvent;
             connection.Action(TEST_ADDR, false);
